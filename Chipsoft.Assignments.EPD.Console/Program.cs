@@ -1,13 +1,22 @@
 ﻿namespace Chipsoft.Assignments.EPDConsole
 {
-    public class Program
+    public static class Program
     {
         //Don't create EF migrations, use the reset db option
         //This deletes and recreates the db, this makes sure all tables exist
 
         private static void AddPatient()
         {
-            //Do action
+            Console.Write("Patient first name: ");
+            var firstName = Console.ReadLine();
+            
+            Console.Write("Patient last name: ");
+            var lastName = Console.ReadLine();
+            
+            Console.Write("Patient address: ");
+            var address = Console.ReadLine();
+            
+            
             //return to show menu again.
         }
 
@@ -83,9 +92,11 @@
                     case 7:
                         return false;
                     case 8:
-                        EPDDbContext dbContext = new EPDDbContext();
-                        dbContext.Database.EnsureDeleted();
-                        dbContext.Database.EnsureCreated();
+                        // TODO: reset db without allowing console to access dbcontext
+                        
+                        // EpdDbContext dbContext = new EpdDbContext();
+                        // dbContext.Database.EnsureDeleted();
+                        // dbContext.Database.EnsureCreated();
                         return true;
                     default:
                         return true;

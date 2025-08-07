@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chipsoft.Assignments.EPDConsole", "Chipsoft.Assignments.EPDConsole\Chipsoft.Assignments.EPDConsole.csproj", "{C3E36DFE-5F45-40C4-BCF8-CEACF7987B54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chipsoft.Assignments.EPD.Console", "Chipsoft.Assignments.EPD.Console\Chipsoft.Assignments.EPD.Console.csproj", "{C3E36DFE-5F45-40C4-BCF8-CEACF7987B54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chipsoft.Assignments.EPD.BLL", "Chipsoft.Assignments.EPD.BLL\Chipsoft.Assignments.EPD.BLL.csproj", "{4551545B-20C1-4F4E-B0C6-27DA60140AFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chipsoft.Assignments.EPD.DAL", "Chipsoft.Assignments.EPD.DAL\Chipsoft.Assignments.EPD.DAL.csproj", "{B556FFB5-A716-48D3-8802-E1E706C30D04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chipsoft.Assignments.EPD.Domain", "Chipsoft.Assignments.EPD.Domain\Chipsoft.Assignments.EPD.Domain.csproj", "{F8A7918D-146B-4EEB-8BAE-99C09900ADC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{C3E36DFE-5F45-40C4-BCF8-CEACF7987B54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3E36DFE-5F45-40C4-BCF8-CEACF7987B54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3E36DFE-5F45-40C4-BCF8-CEACF7987B54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4551545B-20C1-4F4E-B0C6-27DA60140AFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4551545B-20C1-4F4E-B0C6-27DA60140AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4551545B-20C1-4F4E-B0C6-27DA60140AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4551545B-20C1-4F4E-B0C6-27DA60140AFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B556FFB5-A716-48D3-8802-E1E706C30D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B556FFB5-A716-48D3-8802-E1E706C30D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B556FFB5-A716-48D3-8802-E1E706C30D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B556FFB5-A716-48D3-8802-E1E706C30D04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8A7918D-146B-4EEB-8BAE-99C09900ADC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A7918D-146B-4EEB-8BAE-99C09900ADC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A7918D-146B-4EEB-8BAE-99C09900ADC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A7918D-146B-4EEB-8BAE-99C09900ADC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Validators\" />
+      <ProjectReference Include="..\Chipsoft.Assignments.EPD.DAL\Chipsoft.Assignments.EPD.DAL.csproj" />
+      <ProjectReference Include="..\Chipsoft.Assignments.EPD.Domain\Chipsoft.Assignments.EPD.Domain.csproj" />
     </ItemGroup>
 
 </Project>

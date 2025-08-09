@@ -6,6 +6,11 @@ public abstract class Repository<T>(EpdDbContext context) : IRepository<T> where
     {
         return context.Set<T>().Find(id);
     }
+
+    public IEnumerable<T> ReadAll()
+    {
+        return context.Set<T>().ToList();
+    }
     
     public void Create(T entity)
     {

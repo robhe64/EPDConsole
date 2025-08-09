@@ -1,4 +1,5 @@
-﻿using Chipsoft.Assignments.EPD.BLL.Dto;
+﻿using Chipsoft.Assignments.EPD.BLL;
+using Chipsoft.Assignments.EPD.BLL.Dto;
 using Chipsoft.Assignments.EPD.BLL.Managers;
 using Chipsoft.Assignments.EPD.DAL.EF;
 using Microsoft.EntityFrameworkCore;
@@ -21,39 +22,80 @@ public class ConsoleApp(IPatientManager patientManager)
     
     private void AddPatient()
     {
-        var firstName = GetNonNullInput("Patient first name: ");
-        var lastName = GetNonNullInput("Patient last name: ");
-        var address = GetNonNullInput("Patient address: ");
-        
-        var patientDto = new AddPatientDto(firstName, lastName, address);
-        
-        var result = patientManager.AddPatient(patientDto);
+        OperationResult? result;
 
-        Console.WriteLine(result.Success ?
-            "Patient added." :
-            "Error: " + string.Join(", ", result.Errors));
+        do
+        {
+            var firstName = GetNonNullInput("First name: ");
+            var lastName = GetNonNullInput("Last name: ");
+            var address = GetNonNullInput("Address: ");
+        
+            var patientDto = new AddPatientDto(firstName, lastName, address);
+        
+            result = patientManager.AddPatient(patientDto);
 
+            Console.WriteLine("\n" + (result.Success ?
+                "Patient added." :
+                "Error: " + string.Join(", ", result.Errors)));
+        } while (!result.Success);
+        
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
     }
-
-    private void ShowAppointment()
+    
+    private void DeletePatient()
     {
-    }
+        var patients = patientManager.GetAllPatients().ToList();
+        
+        if (patients.Count == 0)
+        {
+            Console.WriteLine("No patients to delete.");
+            return;
+        }
 
-    private void AddAppointment()
-    {
-    }
+        bool parsed, indexNotInRange;
+        int patientIndex;
+        
+        do
+        {
+            Console.Clear();
+            for (var i = 0; i < patients.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {patients[i].FirstName} {patients[i].LastName}");
+            }
 
+            Console.Write("\nSelect patient to delete or type 'c' to cancel: ");
+            var input = Console.ReadLine();
+            if (input?.ToLower() == "c") return;
+            
+            parsed = int.TryParse(input, out patientIndex);
+        
+            indexNotInRange = patientIndex - 1 < 0 || patientIndex - 1 >= patients.Count;
+        } while (!parsed || indexNotInRange);
+        
+        patientIndex--;
+        var patient = patients[patientIndex];
+        patientManager.DeletePatient(patient.Id);
+        
+        Console.WriteLine("Patient deleted. Press any key to continue...");
+        Console.ReadKey();
+    }
+    
+    
     private void DeletePhysician()
     {
+        
     }
 
     private void AddPhysician()
     {
     }
 
-    private void DeletePatient()
+    private void AddAppointment()
+    {
+    }
+    
+    private void ShowAppointment()
     {
     }
     
@@ -65,13 +107,13 @@ public class ConsoleApp(IPatientManager patientManager)
             Console.WriteLine(line);
         }
         Console.WriteLine("");
-        Console.WriteLine("1 - Patient toevoegen");
-        Console.WriteLine("2 - Patienten verwijderen");
-        Console.WriteLine("3 - Arts toevoegen");
-        Console.WriteLine("4 - Arts verwijderen");
-        Console.WriteLine("5 - Afspraak toevoegen");
-        Console.WriteLine("6 - Afspraken inzien");
-        Console.WriteLine("7 - Sluiten");
+        Console.WriteLine("1 - Add patient");
+        Console.WriteLine("2 - Delete patient");
+        Console.WriteLine("3 - Add physician");
+        Console.WriteLine("4 - Delete physician");
+        Console.WriteLine("5 - Add appointment");
+        Console.WriteLine("6 - View appointments");
+        Console.WriteLine("7 - Close");
         Console.WriteLine("8 - Reset db");
 
         if (int.TryParse(Console.ReadLine(), out int option))

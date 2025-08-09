@@ -2,13 +2,10 @@
 
 namespace Chipsoft.Assignments.EPD.BLL.Dto;
 
-public record AddPatientDto(string FirstName, string LastName, string Address);
-
-// Extension methods for use in BLL
-internal static class AddPatientDtoExtensions
+public record AddPatientDto(string FirstName, string LastName, string Address) 
 {
-    internal static Patient ToPatient(this AddPatientDto dto)
+    internal Patient ToPatient()
     {
-        return new Patient(dto.FirstName, dto.LastName, dto.Address);
+        return new Patient(FirstName, LastName, Address);
     }
 }

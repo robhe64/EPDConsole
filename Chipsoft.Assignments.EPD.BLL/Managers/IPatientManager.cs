@@ -6,4 +6,6 @@ namespace Chipsoft.Assignments.EPD.BLL.Managers;
 public interface IPatientManager
 {
     public OperationResult AddPatient(AddPatientDto patientDto);
+    public IEnumerable<GetPatientDto> GetAllPatients();
+    public OperationResult DeletePatient(Guid id);
 }

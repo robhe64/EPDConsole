@@ -2,31 +2,33 @@
 
 public abstract class Repository<T>(EpdDbContext context) : IRepository<T> where T : class
 {
+    protected readonly EpdDbContext Context = context;
+    
     public T? Read(Guid id)
     {
-        return context.Set<T>().Find(id);
+        return Context.Set<T>().Find(id);
     }
 
     public IEnumerable<T> ReadAll()
     {
-        return context.Set<T>().ToList();
+        return Context.Set<T>().ToList();
     }
     
     public void Create(T entity)
     {
-        context.Set<T>().Add(entity);
-        context.SaveChanges();
+        Context.Set<T>().Add(entity);
+        Context.SaveChanges();
     }
     
     public void Update(T entity)
     {
-        context.Set<T>().Update(entity);
-        context.SaveChanges();
+        Context.Set<T>().Update(entity);
+        Context.SaveChanges();
     }
     
     public void Delete(T entity)
     {
-        context.Set<T>().Remove(entity);
-        context.SaveChanges();
+        Context.Set<T>().Remove(entity);
+        Context.SaveChanges();
     }
 }

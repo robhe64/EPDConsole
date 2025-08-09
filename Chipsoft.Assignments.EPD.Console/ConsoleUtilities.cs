@@ -14,12 +14,12 @@ internal static class ConsoleUtilities
         return input;
     }
 
-    internal static int? ChooseFromList<T>(IList<T> items) where T : notnull
+    internal static int? ChooseFromList<T>(IList<T> items, string descriptor) where T : notnull
     {
         if (items.Count == 0)
         {
             Console.Clear();
-            Console.WriteLine("No items in list. Press any key to continue.");
+            Console.WriteLine($"No {descriptor} in list. Press any key to continue.");
             Console.ReadKey();
             return null;
         }
@@ -35,7 +35,7 @@ internal static class ConsoleUtilities
                 Console.WriteLine($"{i + 1}. {items[i].ToString()}");
             }
 
-            Console.Write("\nSelect item or type 'c' to cancel: ");
+            Console.Write($"\nSelect {descriptor} or type 'c' to cancel: ");
             var input = Console.ReadLine();
             if (input?.ToLower() == "c") return null;
             

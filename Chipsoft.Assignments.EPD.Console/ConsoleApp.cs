@@ -1,11 +1,13 @@
-﻿using Chipsoft.Assignments.EPD.BLL;
+﻿using System.Globalization;
+using Chipsoft.Assignments.EPD.BLL;
 using Chipsoft.Assignments.EPD.BLL.Dto;
 using Chipsoft.Assignments.EPD.BLL.Managers;
 using Chipsoft.Assignments.EPD.DAL.EF;
+using Chipsoft.Assignments.EPD.Domain;
 
 namespace Chipsoft.Assignments.EPDConsole;
 
-public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physicianManager)
+public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physicianManager, IAppointmentManager appointmentManager)
 {
 
     
@@ -36,7 +38,7 @@ public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physic
     {
         var patients = patientManager.GetAllPatients().ToList();
 
-        var patientIndex = ConsoleUtilities.ChooseFromList(patients);
+        var patientIndex = ConsoleUtilities.ChooseFromList(patients, "patient");
         if (patientIndex == null) return;
         
         var patient = patients[patientIndex.Value];
@@ -56,10 +58,9 @@ public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physic
 
         do
         { 
-            var firstName =ConsoleUtilities.GetNonNullInput("First name: ");
+            var firstName = ConsoleUtilities.GetNonNullInput("First name: ");
             var lastName = ConsoleUtilities.GetNonNullInput("Last name: ");
             var department = ConsoleUtilities.GetNonNullInput("Department: ");
-            
         
             var physicianDto = new AddPhysicianDto(firstName, lastName, department);
         
@@ -78,7 +79,7 @@ public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physic
     {
         var physicians = physicianManager.GetAllPhysicians().ToList();
 
-        var physicianIndex = ConsoleUtilities.ChooseFromList(physicians);
+        var physicianIndex = ConsoleUtilities.ChooseFromList(physicians, "physician");
         if (physicianIndex == null) return;
         
         var patient = physicians[physicianIndex.Value];
@@ -94,11 +95,101 @@ public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physic
 
     private void AddAppointment()
     {
+        var physicians = physicianManager.GetAllPhysicians().ToList();
+        var patients = patientManager.GetAllPatients().ToList();
+
+        var physicianIndex = ConsoleUtilities.ChooseFromList(physicians, "physician");
+        if (physicianIndex == null) return;
         
+        var patientIndex = ConsoleUtilities.ChooseFromList(patients, "patient");
+        if (patientIndex == null) return;
+        
+        var physician = physicians[physicianIndex.Value];
+        var patient = patients[patientIndex.Value];
+
+        Console.Clear();
+        
+        bool dateParsed;
+        DateTime dateTimeParsed;
+        do
+        {
+            var dateTime = ConsoleUtilities.GetNonNullInput("Date and time (yyyy-MM-dd HH:mm): ");
+            dateParsed = DateTime.TryParseExact(dateTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTimeParsed);
+        } while (!dateParsed);
+        
+        Console.Clear();
+        
+        bool durationParsed;
+        
+        int duration;
+        do
+        {
+            var durationString = ConsoleUtilities.GetNonNullInput("Duration (minutes): ");
+            durationParsed = int.TryParse(durationString, out duration);
+        } while (!durationParsed);
+        
+        var result = appointmentManager.AddAppointment(new AddAppointmentDto(patient.Id, physician.Id, dateTimeParsed, duration));
+        
+        Console.WriteLine("\n" + (result.Success ?
+            "Appointment added." :
+            "Error: " + string.Join(", ", result.Errors)));
+        
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
     }
     
     private void ShowAppointment()
     {
+        Console.WriteLine("Are you a physician (1) or patient (2)?: ");
+
+        int patientDoctorChoice;
+
+        do
+        {
+            var input = Console.ReadLine();
+            if (!int.TryParse(input, out patientDoctorChoice))
+            {
+                Console.WriteLine("Please enter a valid number.");
+            }
+        } while (patientDoctorChoice != 1 && patientDoctorChoice != 2);
+
+        List<ShowAppointmentDto>? appointments = null;
+        
+        switch (patientDoctorChoice)
+        {
+            case 1:
+                var physicians = physicianManager.GetAllPhysicians().ToList();
+                var index = ConsoleUtilities.ChooseFromList(physicians, "physician");
+                if (index == null) return;
+                var physician = physicians[index.Value];
+                appointments = appointmentManager.GetAllAppointmentsOfPhysician(physician.Id).ToList();
+                break;
+                
+           case 2:
+               var patients = patientManager.GetAllPatients().ToList();
+                var index2 = ConsoleUtilities.ChooseFromList(patients, "patient");
+                if (index2 == null) return;
+                var patient = patients[index2.Value];
+                appointments = appointmentManager.GetAllAppointmentsOfPatient(patient.Id).ToList();
+                break;
+        }
+
+        if (appointments == null || appointments.Count == 0)
+        {
+            Console.WriteLine("No appointments found.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+            return;
+        }
+        
+        Console.Clear();
+        foreach (var appointment in appointments)
+        {
+            Console.WriteLine(appointment.ToString());
+        }
+        
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey();
     }
     
     private bool ShowMenu()

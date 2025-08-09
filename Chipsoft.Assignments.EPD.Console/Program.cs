@@ -11,8 +11,10 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddDbContext<EpdDbContext>();
 
 builder.Services.AddSingleton<IPatientManager, PatientManager>();
+builder.Services.AddSingleton<IPhysicianManager, PhysicianManager>();
 
 builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
+builder.Services.AddSingleton<IPhysicianRepository, PhysicianRepository>();
 
 builder.Services.AddSingleton<ConsoleApp>();
 

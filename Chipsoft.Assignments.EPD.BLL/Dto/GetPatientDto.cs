@@ -8,4 +8,9 @@ public record GetPatientDto(Guid Id, string FirstName, string LastName, string A
     {
         return new GetPatientDto(patient.Id, patient.FirstName, patient.LastName, patient.Address);
     }
+
+    public override string ToString()
+    {
+        return $"{FirstName} {LastName}, {Address}";
+    }
 }

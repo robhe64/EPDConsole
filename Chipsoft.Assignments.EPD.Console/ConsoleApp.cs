@@ -2,23 +2,12 @@
 using Chipsoft.Assignments.EPD.BLL.Dto;
 using Chipsoft.Assignments.EPD.BLL.Managers;
 using Chipsoft.Assignments.EPD.DAL.EF;
-using Microsoft.EntityFrameworkCore;
 
 namespace Chipsoft.Assignments.EPDConsole;
 
-public class ConsoleApp(IPatientManager patientManager)
+public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physicianManager)
 {
-    private static string GetNonNullInput(string prompt)
-    {
-        string? input;
-        do
-        {
-            Console.Write(prompt);
-            input = Console.ReadLine();
-        } while (string.IsNullOrEmpty(input));
 
-        return input;
-    }
     
     private void AddPatient()
     {
@@ -26,9 +15,9 @@ public class ConsoleApp(IPatientManager patientManager)
 
         do
         {
-            var firstName = GetNonNullInput("First name: ");
-            var lastName = GetNonNullInput("Last name: ");
-            var address = GetNonNullInput("Address: ");
+            var firstName = ConsoleUtilities.GetNonNullInput("First name: ");
+            var lastName = ConsoleUtilities.GetNonNullInput("Last name: ");
+            var address = ConsoleUtilities.GetNonNullInput("Address: ");
         
             var patientDto = new AddPatientDto(firstName, lastName, address);
         
@@ -46,53 +35,66 @@ public class ConsoleApp(IPatientManager patientManager)
     private void DeletePatient()
     {
         var patients = patientManager.GetAllPatients().ToList();
-        
-        if (patients.Count == 0)
-        {
-            Console.WriteLine("No patients to delete.");
-            return;
-        }
 
-        bool parsed, indexNotInRange;
-        int patientIndex;
+        var patientIndex = ConsoleUtilities.ChooseFromList(patients);
+        if (patientIndex == null) return;
         
-        do
-        {
-            Console.Clear();
-            for (var i = 0; i < patients.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {patients[i].FirstName} {patients[i].LastName}");
-            }
-
-            Console.Write("\nSelect patient to delete or type 'c' to cancel: ");
-            var input = Console.ReadLine();
-            if (input?.ToLower() == "c") return;
-            
-            parsed = int.TryParse(input, out patientIndex);
+        var patient = patients[patientIndex.Value];
+        var result = patientManager.DeletePatient(patient.Id);
         
-            indexNotInRange = patientIndex - 1 < 0 || patientIndex - 1 >= patients.Count;
-        } while (!parsed || indexNotInRange);
+        Console.WriteLine("\n" + (result.Success ?
+            "Patient deleted." :
+            "Error: " + string.Join(", ", result.Errors)));
         
-        patientIndex--;
-        var patient = patients[patientIndex];
-        patientManager.DeletePatient(patient.Id);
-        
-        Console.WriteLine("Patient deleted. Press any key to continue...");
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
     }
     
+    private void AddPhysician()
+    {
+        OperationResult? result;
+
+        do
+        { 
+            var firstName =ConsoleUtilities.GetNonNullInput("First name: ");
+            var lastName = ConsoleUtilities.GetNonNullInput("Last name: ");
+            var department = ConsoleUtilities.GetNonNullInput("Department: ");
+            
+        
+            var physicianDto = new AddPhysicianDto(firstName, lastName, department);
+        
+            result = physicianManager.AddPhysician(physicianDto);
+
+            Console.WriteLine("\n" + (result.Success ?
+                "Physician added." :
+                "Error: " + string.Join(", ", result.Errors)));
+        } while (!result.Success);
+        
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
+    }
     
     private void DeletePhysician()
     {
-        
-    }
+        var physicians = physicianManager.GetAllPhysicians().ToList();
 
-    private void AddPhysician()
-    {
+        var physicianIndex = ConsoleUtilities.ChooseFromList(physicians);
+        if (physicianIndex == null) return;
+        
+        var patient = physicians[physicianIndex.Value];
+        var result = physicianManager.DeletePhysician(patient.Id);
+        
+        Console.WriteLine("\n" + (result.Success ?
+            "Physician deleted." :
+            "Error: " + string.Join(", ", result.Errors)));
+        
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
     }
 
     private void AddAppointment()
     {
+        
     }
     
     private void ShowAppointment()

@@ -149,7 +149,7 @@ public class AppointmentManagerUnitTests
         var patient = new Patient("John", "Doe", "2000 Antwerpen") { Id = patientId };
         var physician = new Physician("Jane", "Smith", "Cardiology") { Id = physicianId };
 
-        // Create a conflicting appointment to trigger validation failure
+        // Create an overlapping appointment to trigger validation failure
         var conflictingAppointment = new Appointment
         {
             Patient = patient,
@@ -181,7 +181,7 @@ public class AppointmentManagerUnitTests
         // Arrange
         var patientId = Guid.NewGuid();
         var physicianId = Guid.NewGuid();
-        var dateTime = new DateTime(2024, 12, 15, 14, 30, 0);
+        var dateTime = new DateTime(2024, 12, 15, 14, 30, 0, DateTimeKind.Utc);
         var duration = 45;
 
         var dto = new AddAppointmentDto(patientId, physicianId, dateTime, duration);

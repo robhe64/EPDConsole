@@ -2,7 +2,4 @@
 
 namespace Chipsoft.Assignments.EPD.DAL.EF;
 
-public class PatientRepository(EpdDbContext context) : Repository<Patient>(context), IPatientRepository
-{
-    
-}
+public class PatientRepository(EpdDbContext context) : Repository<Patient>(context), IPatientRepository;

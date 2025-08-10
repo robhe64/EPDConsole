@@ -2,7 +2,4 @@
 
 namespace Chipsoft.Assignments.EPD.DAL.EF;
 
-public class PhysicianRepository(EpdDbContext context) : Repository<Physician>(context), IPhysicianRepository
-{
-    
-}
+public class PhysicianRepository(EpdDbContext context) : Repository<Physician>(context), IPhysicianRepository;

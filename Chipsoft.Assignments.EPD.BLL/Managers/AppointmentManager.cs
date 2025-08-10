@@ -24,11 +24,8 @@ public class AppointmentManager(
         var physicianAppointments = appointmentRepository.ReadAppointmentsOfPhysician(physician.Id);
         var appointments = patientAppointments.Union(physicianAppointments);
 
-        var appointment = new Appointment
-        {
-            Patient = patient, Physician = physician, StartTime = appointmentDto.DateTime,
-            EndTime = appointmentDto.DateTime.AddMinutes(appointmentDto.Duration)
-        };
+        var appointment = new Appointment(appointmentDto.DateTime,
+            appointmentDto.DateTime.AddMinutes(appointmentDto.Duration), patient, physician);
 
         var validator = new AppointmentValidator(appointments);
         var result = validator.Validate(appointment);
@@ -36,7 +33,7 @@ public class AppointmentManager(
         {
             appointmentRepository.Create(appointment);
         }
-        
+
         return result.IsValid
             ? new OperationResult { Success = true }
             : new OperationResult { Success = false, Errors = result.Errors.Select(x => x.ErrorMessage).ToList() };
@@ -49,6 +46,7 @@ public class AppointmentManager(
 
     public IEnumerable<ShowAppointmentDto> GetAllAppointmentsOfPhysician(Guid physicianId)
     {
-        return appointmentRepository.ReadAppointmentsOfPhysician(physicianId).Select(ShowAppointmentDto.FromAppointment);
+        return appointmentRepository.ReadAppointmentsOfPhysician(physicianId)
+            .Select(ShowAppointmentDto.FromAppointment);
     }
 }

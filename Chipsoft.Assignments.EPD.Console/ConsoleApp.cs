@@ -3,7 +3,6 @@ using Chipsoft.Assignments.EPD.BLL;
 using Chipsoft.Assignments.EPD.BLL.Dto;
 using Chipsoft.Assignments.EPD.BLL.Managers;
 using Chipsoft.Assignments.EPD.DAL.EF;
-using Chipsoft.Assignments.EPD.Domain;
 
 namespace Chipsoft.Assignments.EPDConsole;
 

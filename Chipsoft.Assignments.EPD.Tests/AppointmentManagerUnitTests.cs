@@ -150,13 +150,7 @@ public class AppointmentManagerUnitTests
         var physician = new Physician("Jane", "Smith", "Cardiology") { Id = physicianId };
 
         // Create an overlapping appointment to trigger validation failure
-        var conflictingAppointment = new Appointment
-        {
-            Patient = patient,
-            Physician = physician,
-            StartTime = dateTime,
-            EndTime = dateTime.AddMinutes(30)
-        };
+        var conflictingAppointment = new Appointment(dateTime, dateTime.AddMinutes(30), patient, physician);
 
         _patientRepositoryMock.Setup(r => r.Read(patientId)).Returns(patient);
         _physicianRepositoryMock.Setup(r => r.Read(physicianId)).Returns(physician);

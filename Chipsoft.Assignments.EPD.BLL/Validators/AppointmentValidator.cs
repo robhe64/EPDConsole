@@ -23,7 +23,7 @@ public class AppointmentValidator : AbstractValidator<Appointment>
             .Must(x => x.EndTime < x.StartTime.AddHours(4)).WithMessage("Appointment cannot be longer than 4 hours");
     }
 
-    private bool IsOverlapping(Appointment newAppointment, IEnumerable<Appointment> existingAppointments)
+    private static bool IsOverlapping(Appointment newAppointment, IEnumerable<Appointment> existingAppointments)
     {
         return existingAppointments.Any(existingAppointment => newAppointment.StartTime < existingAppointment.EndTime &&
                                                                newAppointment.EndTime > existingAppointment.StartTime);

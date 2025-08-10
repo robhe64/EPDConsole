@@ -38,7 +38,7 @@ public class PhysicianManager(IPhysicianRepository repository) : IPhysicianManag
         }
 
         return physician == null
-            ? new OperationResult { Success = false, Errors = ["Patient does not exist."] }
+            ? new OperationResult { Success = false, Errors = ["Physician does not exist."] }
             : new OperationResult { Success = true };
     }
 }

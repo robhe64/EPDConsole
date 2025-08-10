@@ -1,6 +1,6 @@
 ﻿# Chipsoft EPD Assignment: Design choices
 *Rob Hellemans, 2025-08-10*
-___
+
 ## Architecture
 The application is built on a traditional N-tier layered architecture with the following layers:
 - **Presentation Layer** (`Chipsoft.Assignments.EPD.Console`): User interface and interaction handling

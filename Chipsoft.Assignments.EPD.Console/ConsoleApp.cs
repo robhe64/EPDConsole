@@ -139,36 +139,40 @@ public class ConsoleApp(IPatientManager patientManager, IPhysicianManager physic
     
     private void ShowAppointment()
     {
-        Console.WriteLine("Are you a physician (1) or patient (2)?: ");
+        Console.WriteLine("View all appointments (1), or view appointments of a physician (2) or patient (3)?: ");
 
-        int patientDoctorChoice;
+        int choice;
 
         do
         {
             var input = Console.ReadLine();
-            if (!int.TryParse(input, out patientDoctorChoice))
+            if (!int.TryParse(input, out choice))
             {
                 Console.WriteLine("Please enter a valid number.");
             }
-        } while (patientDoctorChoice != 1 && patientDoctorChoice != 2);
+        } while (!new List<int> { 1, 2, 3 }.Contains(choice));
 
         List<ShowAppointmentDto>? appointments = null;
         
-        switch (patientDoctorChoice)
+        switch (choice)
         {
             case 1:
+                appointments = appointmentManager.GetAllAppointments().ToList();
+                break;
+            
+            case 2:
                 var physicians = physicianManager.GetAllPhysicians().ToList();
-                var index = ConsoleUtilities.ChooseFromList(physicians, "physician");
-                if (index == null) return;
-                var physician = physicians[index.Value];
+                var physicianIndex = ConsoleUtilities.ChooseFromList(physicians, "physician");
+                if (physicianIndex == null) return;
+                var physician = physicians[physicianIndex.Value];
                 appointments = appointmentManager.GetAllAppointmentsOfPhysician(physician.Id).ToList();
                 break;
                 
-           case 2:
+           case 3:
                var patients = patientManager.GetAllPatients().ToList();
-                var index2 = ConsoleUtilities.ChooseFromList(patients, "patient");
-                if (index2 == null) return;
-                var patient = patients[index2.Value];
+                var patientIndex = ConsoleUtilities.ChooseFromList(patients, "patient");
+                if (patientIndex == null) return;
+                var patient = patients[patientIndex.Value];
                 appointments = appointmentManager.GetAllAppointmentsOfPatient(patient.Id).ToList();
                 break;
         }

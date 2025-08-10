@@ -39,6 +39,11 @@ public class AppointmentManager(
             : new OperationResult { Success = false, Errors = result.Errors.Select(x => x.ErrorMessage).ToList() };
     }
 
+    public IEnumerable<ShowAppointmentDto> GetAllAppointments()
+    {
+        return appointmentRepository.ReadAll().Select(ShowAppointmentDto.FromAppointment);
+    }
+
     public IEnumerable<ShowAppointmentDto> GetAllAppointmentsOfPatient(Guid patientId)
     {
         return appointmentRepository.ReadAppointmentsOfPatient(patientId).Select(ShowAppointmentDto.FromAppointment);
